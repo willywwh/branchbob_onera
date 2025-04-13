@@ -1,39 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Color Proxy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Pages Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <script>
-    window.addEventListener("message", async (event) => {
-      if (!event.data || !event.data.payload) return;
+    <h1>Test Communication between Branchbob and GitHub Pages</h1>
+    <button onclick="sendData()">Send Data to GitHub Pages</button>
+    <div id="output"></div>
 
-      const payload = event.data.payload;
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxcGvd92-fLL1OwCLJTHtbayT4EMKLfF4nPjPHp5LrT47pPynNARp3QC3AqzrDXEXGs6w/exec";
-      const proxyURL = "https://corsproxy.io/?" + encodeURIComponent(scriptURL);
+    <script>
+        function sendData() {
+            // Hardcoded input
+            const inputData = {
+                black: 10,
+                white: 20,
+                yellow: 30,
+                red: 40,
+                blue: 50
+            };
 
-      try {
-        const response = await fetch(proxyURL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) throw new Error("Network response was not ok");
-
-        const data = await response.json();
-
-        // Send result back to parent page
-        window.parent.postMessage({ hex: data.hex }, "*");
-      } catch (error) {
-        console.error("❌ Failed to fetch from Google Sheets:", error);
-        window.parent.postMessage({ error: error.message }, "*");
-      }
-    });
-  </script>
+            // Send input to GitHub Pages server
+            fetch('https://willywwh.github.io/my-github-pages-repo/script.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(inputData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerHTML = `Processed Color: ${data.hex}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('output').innerHTML = 'Failed to fetch data.';
+            });
+        }
+    </script>
 </body>
 </html>

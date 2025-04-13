@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script>
+    window.addEventListener("message", async (event) => {
+      if (!event.data || !event.data.payload) return;
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwEVqazvepY9jPip8RrdDUIbBb8nB6DK8vYP-9kgPeQfJYkCHbdNuJc3lUHdqHCqR3BvQ/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(event.data.payload)
+        });
+
+        const result = await res.json();
+        event.source.postMessage({ hex: result.hex }, event.origin);
+      } catch (e) {
+        event.source.postMessage({ error: "Failed to fetch color" }, event.origin);
+      }
+    });
+  </script>
+</head>
+<body>
+  <p>Proxy Ready</p>
+</body>
+</html>

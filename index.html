@@ -7,7 +7,7 @@
       if (!event.data || !event.data.payload) return;
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbwEVqazvepY9jPip8RrdDUIbBb8nB6DK8vYP-9kgPeQfJYkCHbdNuJc3lUHdqHCqR3BvQ/exec", {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxcGvd92-fLL1OwCLJTHtbayT4EMKLfF4nPjPHp5LrT47pPynNARp3QC3AqzrDXEXGs6w/exec", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(event.data.payload)

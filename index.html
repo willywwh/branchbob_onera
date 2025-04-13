@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <script>
-    window.addEventListener("message", async (event) => {
-      if (!event.data || !event.data.payload) return;
+<script>
+  window.addEventListener("message", async (event) => {
+    if (!event.data || !event.data.payload) return;
 
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxcGvd92-fLL1OwCLJTHtbayT4EMKLfF4nPjPHp5LrT47pPynNARp3QC3AqzrDXEXGs6w/exec", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(event.data.payload)
-        });
+    const payload = event.data.payload;
+    console.log("📩 Received payload from parent:", payload);
 
-        const result = await res.json();
-        event.source.postMessage({ hex: result.hex }, event.origin);
-      } catch (e) {
-        event.source.postMessage({ error: "Failed to fetch color" }, event.origin);
-      }
-    });
-  </script>
-</head>
-<body>
-  <p>Proxy Ready</p>
-</body>
-</html>
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxcGvd92-fLL1OwCLJTHtbayT4EMKLfF4nPjPHp5LrT47pPynNARp3QC3AqzrDXEXGs6w/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+      console.log("✅ Google Sheets response text:", text);
+
+      const result = JSON.parse(text);
+      event.source.postMessage({ hex: result.hex }, event.origin);
+    } catch (e) {
+      console.error("❌ Failed to fetch from Google Sheets:", e);
+      event.source.postMessage({ error: "Failed to fetch color" }, event.origin);
+    }
+  });
+</script>

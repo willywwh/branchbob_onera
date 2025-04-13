@@ -1,25 +1,39 @@
-<script>
-  window.addEventListener("message", async (event) => {
-    if (!event.data || !event.data.payload) return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Color Proxy</title>
+</head>
+<body>
+  <script>
+    window.addEventListener("message", async (event) => {
+      if (!event.data || !event.data.payload) return;
 
-    const payload = event.data.payload;
-    console.log("📩 Received payload from parent:", payload);
+      const payload = event.data.payload;
+      const scriptURL = "https://script.google.com/macros/s/AKfycbxcGvd92-fLL1OwCLJTHtbayT4EMKLfF4nPjPHp5LrT47pPynNARp3QC3AqzrDXEXGs6w/exec";
+      const proxyURL = "https://corsproxy.io/?" + encodeURIComponent(scriptURL);
 
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbxcGvd92-fLL1OwCLJTHtbayT4EMKLfF4nPjPHp5LrT47pPynNARp3QC3AqzrDXEXGs6w/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+      try {
+        const response = await fetch(proxyURL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
 
-      const text = await res.text();
-      console.log("✅ Google Sheets response text:", text);
+        if (!response.ok) throw new Error("Network response was not ok");
 
-      const result = JSON.parse(text);
-      event.source.postMessage({ hex: result.hex }, event.origin);
-    } catch (e) {
-      console.error("❌ Failed to fetch from Google Sheets:", e);
-      event.source.postMessage({ error: "Failed to fetch color" }, event.origin);
-    }
-  });
-</script>
+        const data = await response.json();
+
+        // Send result back to parent page
+        window.parent.postMessage({ hex: data.hex }, "*");
+      } catch (error) {
+        console.error("❌ Failed to fetch from Google Sheets:", error);
+        window.parent.postMessage({ error: error.message }, "*");
+      }
+    });
+  </script>
+</body>
+</html>

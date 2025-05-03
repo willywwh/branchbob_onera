@@ -36,4 +36,4 @@ jobs:
           git config user.email "william.streetracer.m5@gmail.com"
           git add Data/output.txt
           git commit -m "Append text to output file"
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/willywwh/${{ github.repository }}.git HEAD:main
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/willywwh/branchbob_onera.git HEAD:main

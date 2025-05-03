@@ -29,8 +29,8 @@ jobs:
 
     - name: Commit and push output
       run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@users.noreply.github.com"
+        git config user.name "willywwh"
+        git config user.email "william.streetracer.m5@gmail.com"
         git add Data/output.txt
         git commit -m "Update output.txt with new input"
         git push

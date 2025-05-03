@@ -1,0 +1,19 @@
+name: Send Message to Google Sheets
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message to log to Google Sheets"
+        required: true
+
+jobs:
+  post-to-google-sheets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Google Sheets
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "{\"message\": \"${{ github.event.inputs.message }}\"}" \
+            "https://script.google.com/macros/s/AKfycbzv0Lope1t3a4r2qMHCVVNphHX0VNo1JEMI73QNG_d-Gfvh9acp0yQNTQQXWIRE_ubJig/exec"

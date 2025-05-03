@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Read input from environment variable
-const input = process.env.INPUT_TEXT || 'No input text provided';
+const input = process.env.INPUT_TEXT || 'No in text provided';
 
 // Ensure the Data directory exists
 //const outputDir = path.join(__dirname, 'Data');

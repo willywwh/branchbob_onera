@@ -5,32 +5,32 @@ on:
   workflow_dispatch:
     inputs:
       text:
-        description: 'Text to write to file'
+        description: "Text to write to file"
         required: true
-        default: 'Hello from GitHub Actions!'
+        default: "Hello from GitHub Actions!"
 
 jobs:
   write-text:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
 
-    - name: Run Data/print-to-file.js with input
-      run: |
-        export INPUT_TEXT="${{ github.event.inputs.text }}"
-        node Data/print-to-file.js
+      - name: Run Data/print-to-file.js with input
+        run: |
+          export INPUT_TEXT="${{ github.event.inputs.text }}"
+          node Data/print-to-file.js
 
-    - name: Commit and push output
-      run: |
-        git config user.name "willywwh"
-        git config user.email "william.streetracer.m5@gmail.com"
-        # git add Data/output.txt
-        git commit -m "Update output.txt with new input"
-        git push
+      - name: Commit and push output
+        run: |
+          git config user.name "willywwh"
+          git config user.email "william.streetracer.m5@gmail.com"
+          # git add Data/output.txt
+          git commit -m "Update output.txt with new input"
+          git push

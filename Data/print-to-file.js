@@ -6,7 +6,8 @@ const path = require('path');
 const input = process.env.INPUT_TEXT || 'No input text provided';
 
 // Ensure the Data directory exists
-const outputDir = path.join(__dirname, 'Data');
+//const outputDir = path.join(__dirname, 'Data');
+const outputDir = __dirname;
 if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
 }

@@ -1,6 +1,9 @@
 # .github/workflows/print-text.yml
 name: Print Text to File
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -33,4 +36,4 @@ jobs:
           git config user.email "william.streetracer.m5@gmail.com"
           git add Data/output.txt
           git commit -m "Append text to output file"
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/willywwh/${{ github.repository }}.git HEAD:main

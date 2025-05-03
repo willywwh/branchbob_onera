@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Run print-to-file.js with input
+    - name: Run Data/print-to-file.js with input
       run: |
         export INPUT_TEXT="${{ github.event.inputs.text }}"
         node print-to-file.js

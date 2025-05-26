@@ -1,0 +1,161 @@
+<div id="color-generator-container">
+  <style>
+    #color-generator-container {
+      font-family: Arial, sans-serif;
+      padding: 1em;
+      max-width: 400px;
+      margin: auto;
+      background: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    label {
+      display: block;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 0.5em;
+      margin-top: 0.3em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 1.5em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #color-display {
+      margin-top: 1.5em;
+      text-align: center;
+    }
+
+    #color-box {
+      width: 100%;
+      height: 50px;
+      border-radius: 6px;
+      margin-top: 0.5em;
+      border: 1px solid #ccc;
+    }
+
+    @media (max-width: 480px) {
+      #color-generator-container {
+        padding: 0.8em;
+      }
+    }
+  </style>
+
+  <h2>Color Mixer</h2>
+  <label>Black</label>
+  <input type="number" id="black" min="0" max="100" />
+
+  <label>White</label>
+  <input type="number" id="white" min="0" max="100" />
+
+  <label>Yellow</label>
+  <input type="number" id="yellow" min="0" max="100" />
+
+  <label>Red</label>
+  <input type="number" id="red" min="0" max="100" />
+
+  <label>Blue</label>
+  <input type="number" id="blue" min="0" max="100" />
+
+  <button onclick="submitColors()">Generate Color</button>
+
+  <div id="color-display">
+    <p>Generated Color</p>
+    <div id="color-box"></div>
+    <p id="hex-code"></p>
+  </div>
+
+  <script>
+
+    function generateEncouragingMessage(shadeName) 
+    {
+      const messages = [
+      "-- a radiant glow for confident days!",
+      "–- perfect for making bold impressions!",
+      "–- a subtle charm for everyday elegance.",
+      "–- made for those who shine without trying.",
+      "–- a color that speaks your truth!",
+      "–- soft, stunning, and full of grace.",
+      "–- you're glowing already!",
+      "–- wear it like your confidence."
+      ];
+
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      const randomMessage = messages[randomIndex];
+
+      return `You picked ${shadeName} ${randomMessage}`;
+    }
+
+    async function submitColors() 
+    {
+      const black = document.getElementById("black").value || 0;
+      const white = document.getElementById("white").value || 0;
+      const yellow = document.getElementById("yellow").value || 0;
+      const red = document.getElementById("red").value || 0;
+      const blue = document.getElementById("blue").value || 0;
+
+      const payload = {
+        black: parseInt(black),
+        white: parseInt(white),
+        yellow: parseInt(yellow),
+        red: parseInt(red),
+        blue: parseInt(blue)
+      };
+
+      await fetch("https://script.google.com/macros/s/AKfycbycWn8K4pGrg38NtDMkzj7AdxZhwTWlhutDHbcF36SuUPM5P1hOFk_UCmSCYNL8DYGk/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        const colorBox = document.getElementById("color-box");
+        const hexCode = document.getElementById("hex-code");
+        const hexMessage = document.getElementById("hex-message");
+
+        if (data.hex === "#GGGGGG") 
+        {
+          colorBox.style.backgroundColor = "#cccccc"; // fallback color
+          //hexCode.textContent = `Generated HEX: Invalid`;
+          hexCode.textContent = `Onera AI is coming soon to find infinite shades from your imagination`;
+          //hexMessage.textContent = "Invalid color generated. Please adjust input values.";
+        } 
+        else 
+        {
+          colorBox.style.backgroundColor = data.hex;
+          //hexCode.textContent = `Generated HEX: ${data.hex}`;
+          hexCode.textContent = generateEncouragingMessage(data.shadeName);
+          //hexCode.textContent = `Onera Shade: ${data.shadeName}`
+          //hexMessage.textContent = ""; // clear message
+        }
+      })
+      .catch(error => console.error("Error:", error));
+  }
+</script>
+</div>
